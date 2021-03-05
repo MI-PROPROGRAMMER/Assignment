@@ -1,0 +1,157 @@
+################################################### PART 1 ##################################################
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt 
+
+avg_incomes = []
+women_col = []
+
+def  summ(data_info):
+    income = 0
+    income_len = 0
+    i = 0
+    sum1 = 0
+    income = data_info
+    income_len = income.size
+    for i in range(income_len):
+        cut = income[i]
+    #     print(cut)
+        num_part = cut[1:]
+    #     print(num_part)
+        sum1 = sum1 + float(num_part)  
+#     print("AVERAGE INCOME:")
+#     print(sum1/income_len)
+    avg_incomes.append(sum1)
+    return sum1/income_len
+
+   
+def female_ratio(data_into):
+    data_into[['Male','Female']] = data_into.GenderPop.str.split("_",expand=True)
+    female = 0
+    female_len = 0
+    i = 0
+    cut = 0
+    num_part = 0
+    sum2 = 0
+    female = data_into['Female']
+    female_len = female.size
+    for i in range(female_len):
+        cut = female[i]
+        if(len(cut) > 1):
+            cut = int(cut.rstrip(cut[-1]))
+        else:
+            cut = 0
+        sum2 = sum2 + cut
+#     print(sum2)
+    women_col.append(sum2)
+    return sum2
+    
+
+data0 = pd.read_csv("Assignment/states0.csv")
+data0 = data0.drop(data0.columns[0], axis=1)
+# display(data0)
+
+summ(data0['Income'])
+female_ratio(data0)    
+
+
+data1 = pd.read_csv("Assignment/states1.csv")
+data1 = data1.drop(data1.columns[0], axis=1)
+# display(data1)
+
+summ(data1['Income'])
+female_ratio(data1)
+
+data2 = pd.read_csv("Assignment/states2.csv")
+data2 = data2.drop(data2.columns[0], axis=1)
+# display(data2)
+
+summ(data2['Income'])
+female_ratio(data2)
+
+data3 = pd.read_csv("Assignment/states3.csv")
+data3 = data3.drop(data3.columns[0], axis=1)
+# display(data3)
+
+summ(data3['Income'])
+female_ratio(data3)
+
+data4 = pd.read_csv("Assignment/states4.csv")
+data4 = data4.drop(data4.columns[0], axis=1)
+# display(data4)
+
+summ(data4['Income'])
+female_ratio(data4)
+
+data5 = pd.read_csv("Assignment/states5.csv")
+data5 = data5.drop(data5.columns[0], axis=1)
+# display(data5)
+
+summ(data5['Income'])
+female_ratio(data5)
+
+data6 = pd.read_csv("Assignment/states6.csv")
+data6 = data6.drop(data6.columns[0], axis=1)
+# display(data6)
+
+summ(data6['Income'])
+female_ratio(data6)
+
+data7 = pd.read_csv("Assignment/states7.csv")
+data7 = data7.drop(data7.columns[0], axis=1)
+# display(data7)
+
+summ(data7['Income'])
+female_ratio(data7)
+
+data8 = pd.read_csv("Assignment/states8.csv")
+data8 = data8.drop(data8.columns[0], axis=1)
+# display(data8)
+female_ratio(data8)
+
+summ(data8['Income'])
+
+data9 = pd.read_csv("Assignment/states9.csv")
+data9 = data9.drop(data9.columns[0], axis=1)
+# display(data9)
+female_ratio(data9)
+
+summ(data9['Income'])
+# print(avg_incomes)
+# print(women_col)
+
+graph_data = pd.DataFrame({'the_income_column' : avg_incomes,
+                           'the_women_column' : women_col})
+# display(graph_data)
+
+plt.scatter(women_col, avg_incomes, c = "blue")
+
+plt.show()
+
+##################################################### PART 2 ########################################################################
+
+inventory = pd.read_csv("Assignment/inventory.csv")
+# display(inventory)
+
+staten_island = inventory.iloc[:10,:]
+# print(staten_island)
+
+product_request = staten_island.product_description
+# print(product_request)
+
+Brooklyn_data = inventory[inventory.location == 'Brooklyn']
+# print(Brooklyn_data)
+seed_request = Brooklyn_data.product_type
+# print(seed_request)
+
+inventory['in_stock'] = inventory['quantity'] > 0 
+# display(inventory)
+
+inventory['total_value'] = inventory['price'] * inventory['quantity']
+# display(inventory)
+
+
+combine_lambda = lambda row: '{} - {}'.format(row.product_type,row.product_description)
+inventory['full_description'] = inventory.apply(combine_lambda, axis=1)
+# display(inventory)
